@@ -13,7 +13,7 @@ import jakarta.mail.internet.InternetAddress;
 class MailerBuilderTest {
 
 	@Test
-	void test() throws AddressException {
+	void test() {
 		assertThrows(IllegalArgumentException.class, ()-> new MailerBuilder(null));
 		
 		final ObservableBuilder builder = new ObservableBuilder("toto");
@@ -43,6 +43,11 @@ class MailerBuilderTest {
 		assertEquals(4, builder.props.size());
 		assertEquals(true, builder.props.get("mail.smtp.auth"));
 		assertNotNull(builder.auth);
+	}
+	
+	@Test
+	void moreTests() throws AddressException {
+		final ObservableBuilder builder = new ObservableBuilder("toto");
 
 		builder.withAuthentication("me@gmail.com", "gmailpwd");
 		assertEquals("me@gmail.com",builder.getUser());
@@ -55,12 +60,6 @@ class MailerBuilderTest {
 		assertEquals(new InternetAddress("me@gmail.com"), builder.getDefaultSender().getAddress());
 		builder.withDefaultSender(null);
 		assertNull(builder.getDefaultSender());
-		
-	}
-	
-	@Test
-	void moreTests() {
-		final ObservableBuilder builder = new ObservableBuilder("toto");
 
 		builder.withEncryption(Encryption.SSL);
 		assertEquals(Encryption.SSL, builder.getEncryption());
