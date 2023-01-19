@@ -105,20 +105,24 @@ public class MailerBuilder {
 		props.put("mail.smtp.host", host);
 		props.put("mail.smtp.port", port);
 		encryption.apply(props);
-		final Authenticator auth;
-		if (user!=null) {
-			props.put("mail.smtp.auth", "true"); //enable authentication
-			auth = new Authenticator() {
+		final Authenticator auth = getAuthenticator();
+		if (auth!=null) {
+			props.put("mail.smtp.auth", true); //enable authentication
+		}
+		return build(props, auth);
+	}
+	
+	Mailer build(Properties props, Authenticator auth) {
+		return new DefaultMailer(Session.getInstance(props, auth), defaultSender);
+	}
+	
+	private Authenticator getAuthenticator() {
+		return user==null ? null : new Authenticator() {
 				@Override
 				protected PasswordAuthentication getPasswordAuthentication() {
 					return new PasswordAuthentication(user, pwd);
 				}
 			};
-		} else {
-			auth = null;
-		}
-		final Session session = Session.getDefaultInstance(props, auth);
-		return new DefaultMailer(session, defaultSender);
 	}
 
 	/** Gets the SMTP host.

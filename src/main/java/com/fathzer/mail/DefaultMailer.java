@@ -21,7 +21,7 @@ public class DefaultMailer implements Mailer {
 	 */
 	public DefaultMailer(Session session, EMailAddress defaultSender) {
 		this.session = session;
-		this.defaultSender = defaultSender.getAddress();
+		this.defaultSender = defaultSender==null ? null : defaultSender.getAddress();
 	}
 	
 	/** Sets the debug mode of underlying jakarta mail api.

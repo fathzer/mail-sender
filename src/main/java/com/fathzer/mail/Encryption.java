@@ -9,11 +9,11 @@ public enum Encryption {
 	/** No Encryption */
 	NONE(25, p -> {}),
 	/** <a href="https://datatracker.ietf.org/doc/html/rfc6409">TLS</a>*/
-	TLS(587, p -> p.put("mail.smtp.starttls.enable", "true")),
+	TLS(587, p -> p.put("mail.smtp.starttls.enable", true)),
 	/** <a href="https://datatracker.ietf.org/doc/html/rfc8314">SSL</a>*/
 	SSL(465, p -> {
 		p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-		p.put("mail.smtps.ssl.checkserveridentity","true");
+		p.put("mail.smtp.ssl.checkserveridentity",true);
 	});
 
 	private int defaultPort;
