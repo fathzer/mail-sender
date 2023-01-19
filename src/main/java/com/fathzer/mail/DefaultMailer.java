@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import jakarta.mail.Address;
-//import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.Session;
 import jakarta.mail.Transport;
@@ -20,7 +19,7 @@ public class DefaultMailer implements Mailer {
 	 * @param session The jakarta Session object
 	 * @param defaultSender The default sender mail address or null if no default sender is defined
 	 */
-	public DefaultMailer(Session session, MailAddress defaultSender) {
+	public DefaultMailer(Session session, EMailAddress defaultSender) {
 		this.session = session;
 		this.defaultSender = defaultSender.getAddress();
 	}
@@ -40,7 +39,7 @@ public class DefaultMailer implements Mailer {
 			if (message.getReplyTo()!=null) {
 				msg.setReplyTo(toAddresses(message.getReplyTo()));
 			}
-			msg.setRecipients(jakarta.mail.Message.RecipientType.TO, message.getRecipients().stream().map(MailAddress::getAddress).toArray(Address[]::new));
+			msg.setRecipients(jakarta.mail.Message.RecipientType.TO, message.getRecipients().stream().map(EMailAddress::getAddress).toArray(Address[]::new));
 			msg.setSubject(message.getSubject());
 			msg.setContent(message.getContent(), message.getMimeType().toString());
 	
@@ -55,7 +54,7 @@ public class DefaultMailer implements Mailer {
 		return message.getSender()==null ? defaultSender : message.getSender().getAddress();
 	}
 	
-	private Address[] toAddresses(List<MailAddress> addr) {
-		return addr.stream().map(MailAddress::getAddress).toArray(Address[]::new);
+	private Address[] toAddresses(List<EMailAddress> addr) {
+		return addr.stream().map(EMailAddress::getAddress).toArray(Address[]::new);
 	}
 }

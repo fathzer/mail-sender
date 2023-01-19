@@ -5,9 +5,9 @@ import java.util.List;
 /** A Mail message.
  */
 public class EMail {
-	private MailAddress sender;
-	private List<MailAddress> recipients;
-	private List<MailAddress> replyTo;
+	private EMailAddress sender;
+	private List<EMailAddress> recipients;
+	private List<EMailAddress> replyTo;
 	private String subject;
 	private String content;
 	private MimeType mimeType;
@@ -20,7 +20,7 @@ public class EMail {
 	 * @see #withMimeType(MimeType)
 	 * @throws IllegalArgumentException if recipients is empty or null or one of others arguments is null 
 	 */
-	public EMail(List<MailAddress> recipients, String subject, String content) {
+	public EMail(List<EMailAddress> recipients, String subject, String content) {
 		super();
 		if (recipients==null || recipients.isEmpty() || subject == null || content==null) {
 			throw new IllegalArgumentException();
@@ -36,7 +36,7 @@ public class EMail {
 	 * @param sender The sender of this message. Null to use the mailer's default sender
 	 * @return this
 	 */
-	public EMail withSender(MailAddress sender) {
+	public EMail withSender(EMailAddress sender) {
 		this.sender = sender;
 		return this;
 	}
@@ -45,7 +45,7 @@ public class EMail {
 	 * @param replyTo a list of email addresses or null to not specifying reply '<i>reply to</i>'
 	 * @return this
 	 */
-	public EMail withReplyTo(List<MailAddress> replyTo) {
+	public EMail withReplyTo(List<EMailAddress> replyTo) {
 		this.replyTo = replyTo;
 		return this;
 	}
@@ -63,7 +63,7 @@ public class EMail {
 		return this;
 	}
 
-	List<MailAddress> getRecipients() {
+	List<EMailAddress> getRecipients() {
 		return recipients;
 	}
 
@@ -79,11 +79,11 @@ public class EMail {
 		return mimeType;
 	}
 
-	MailAddress getSender() {
+	EMailAddress getSender() {
 		return sender;
 	}
 
-	List<MailAddress> getReplyTo() {
+	List<EMailAddress> getReplyTo() {
 		return replyTo;
 	}
 }

@@ -12,7 +12,7 @@ public class MailerBuilder {
 	private final String host;
 	private String user;
 	private String pwd;
-	private MailAddress defaultSender;
+	private EMailAddress defaultSender;
 	private Encryption encryption;
 	private int port;
 	
@@ -26,7 +26,7 @@ public class MailerBuilder {
 			throw new IllegalArgumentException("Host is null");
 		}
 		this.host = host;
-		this.withEncryption(Encryption.SSL);
+		this.withEncryption(Encryption.TLS);
 	}
 	
 	/** Sets the encryption method to communicate with the server.
@@ -54,16 +54,16 @@ public class MailerBuilder {
 	 */
 	public MailerBuilder withAuthentication(String user, String pwd) {
 		if (user!=null && pwd==null) {
-			throw new IllegalStateException("Password is null and not user");
+			throw new IllegalArgumentException("Password is null and not user");
 		}
 		if (pwd!=null && user==null) {
-			throw new IllegalStateException("User is null and not password");
+			throw new IllegalArgumentException("User is null and not password");
 		}
 		this.user = user;
 		this.pwd = pwd;
 		if (defaultSender==null) {
 			try {
-				defaultSender = new MailAddress(user);
+				defaultSender = new EMailAddress(user);
 			} catch (IllegalArgumentException e) {
 				// Ok, user is not a mail address 
 			}
@@ -73,11 +73,11 @@ public class MailerBuilder {
 
 	/** Sets a default sender for messages sent with this server.
 	 * <br>This default sender is also set by {@link #withAuthentication(String, String)} if not already set and user passed to the method is a valid email address.
-	 * <br>The sender can always be redefined with {@link EMail#withSender(MailAddress)}
+	 * <br>The sender can always be redefined with {@link EMail#withSender(EMailAddress)}
 	 * @param defaultSender the new default sender address.
 	 * @return this
 	 */
-	public MailerBuilder withDefaultSender(MailAddress defaultSender) {
+	public MailerBuilder withDefaultSender(EMailAddress defaultSender) {
 		this.defaultSender = defaultSender;
 		return this;
 	}
@@ -91,7 +91,7 @@ public class MailerBuilder {
 	 */
 	public MailerBuilder withPort(int port) {
 		if (port<=0) {
-			throw new IllegalStateException("Port is <= 0");
+			throw new IllegalArgumentException("Port is <= 0");
 		}
 		this.port = port;
 		return this;
@@ -159,7 +159,7 @@ public class MailerBuilder {
 	/** Gets The default message sender.
 	 * @return a mail address. Null is no default sender is set.
 	 */
-	public MailAddress getDefaultSender() {
+	public EMailAddress getDefaultSender() {
 		return defaultSender;
 	}
 }
