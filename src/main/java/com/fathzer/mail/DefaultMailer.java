@@ -10,35 +10,32 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.MimeMessage;
 
+/** A default implementation of mailer based on javax/jakarta.mail.
+ */
 public class DefaultMailer implements Mailer {
 	private final Session session;
-	private Address sender;
-	private Address[] replyTo;
+	private Address defaultSender;
 
-	public DefaultMailer(Session session, MailAddress sender) {
+	/** Constructor.
+	 * @param session The jakarta Session object
+	 * @param defaultSender The default sender mail address or null if no default sender is defined
+	 */
+	public DefaultMailer(Session session, MailAddress defaultSender) {
 		this.session = session;
-		this.sender = sender.getAddress();
+		this.defaultSender = defaultSender.getAddress();
 	}
 	
 	public void setDebug(boolean debug) {
 		session.setDebug(debug);
 	}
 	
-	public void setSender(MailAddress sender) {
-		this.sender = sender.getAddress();
-	}
-	
-	public void setReplyTo(List<MailAddress> replyTo) {
-		this.replyTo = replyTo==null?null:toAddresses(replyTo);
-	}
-
 	@Override
 	public void send(Message message) throws IOException {
 		try {
 			final jakarta.mail.Message msg = new MimeMessage(session);
-			msg.setFrom(sender);
-			if (replyTo!=null) {
-				msg.setReplyTo(replyTo);
+			msg.setFrom(getSender(message));
+			if (message.getReplyTo()!=null) {
+				msg.setReplyTo(toAddresses(message.getReplyTo()));
 			}
 			msg.setRecipients(jakarta.mail.Message.RecipientType.TO, message.getRecipients().stream().map(MailAddress::getAddress).toArray(Address[]::new));
 			msg.setSubject(message.getSubject());
@@ -49,6 +46,10 @@ public class DefaultMailer implements Mailer {
 		} catch (MessagingException e) {
 			throw new IOException(e);
 		}
+	}
+	
+	private Address getSender(Message message) {
+		return message.getSender()==null ? defaultSender : message.getSender().getAddress();
 	}
 	
 	private Address[] toAddresses(List<MailAddress> addr) {

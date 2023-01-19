@@ -18,5 +18,5 @@ Here is an example using GMail
 
 ```
 Mailer mailer = new MailerBuilder("smtp.gmail.com").withAuthentication("me@gmail.com", "anapppassword").build();
-mailer.send(new Message(Arrays.asList(new MailAddress("other@hisdomain.com")), "test", "This is a test from Google"));
+mailer.send(new Message(MailAddress.list("other@hisdomain.com"), "test", "This is a test from Google"));
 ```

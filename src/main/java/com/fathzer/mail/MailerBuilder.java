@@ -10,35 +10,58 @@ public class MailerBuilder {
 	private String host;
 	private String user;
 	private String pwd;
-	private MailAddress from;
+	private MailAddress defaultSender;
 	private Encryption encryption;
 	private int port;
 	
+	/** Constructor
+	 * <br>By default, the encryption is set to TLS, the port is the default TLS port (587) and connection is made with no authentication.
+	 * @param host The SMTP host, for example <i>smtp.gmail.com</i>
+	 * @throws IllegalArgumentException if host is null
+	 */
 	public MailerBuilder(String host) {
-		this.withHost(host);
+		if (host==null) {
+			throw new IllegalArgumentException("Host is null");
+		}
+		this.host = host;
 		this.withEncryption(Encryption.SSL);
 	}
 	
-	public MailerBuilder withHost(String host) {
-		if (host==null) {
-			throw new IllegalStateException("Host is null");
-		}
-		this.host = host;
-		return this;
-	}
-
+	/** Sets the encryption method to communicate with the server.
+	 * <br>The port is also modify to match the default port accordingly with the encryption. 
+	 * @param encryption Tee new encryption.
+	 * @return this
+	 * @throws IllegalArgumentException if encryption is null
+	 */
 	public MailerBuilder withEncryption(Encryption encryption) {
+		if (encryption==null) {
+			throw new IllegalArgumentException("Host is null");
+		}
 		this.encryption = encryption;
 		this.port = encryption.getDefaultPort();
 		return this;
 	}
 	
+	/** Defines the SMTP host authentication.
+	 * @param user The user used for login.<br>
+	 * If no default sender has already been set and <i>user</i> is a valid email address, it is used as default sender.<br>
+	 * Pass null to remove authentication.
+	 * @param pwd The password used for login, null to remove authentication.
+	 * @return this
+	 * @throws IllegalArgumentException if one of the arguments is null and not the other
+	 */
 	public MailerBuilder withAuthentication(String user, String pwd) {
+		if (user!=null && pwd==null) {
+			throw new IllegalStateException("Password is null and not user");
+		}
+		if (pwd!=null && user==null) {
+			throw new IllegalStateException("User is null and not password");
+		}
 		this.user = user;
 		this.pwd = pwd;
-		if (from==null) {
+		if (defaultSender==null) {
 			try {
-				from = new MailAddress(user);
+				defaultSender = new MailAddress(user);
 			} catch (IllegalArgumentException e) {
 				// Ok, user is not a mail address 
 			}
@@ -46,27 +69,36 @@ public class MailerBuilder {
 		return this;
 	}
 
-	public MailerBuilder withFrom(MailAddress from) {
-		this.from = from;
+	/** Sets a default sender for messages sent with this server.
+	 * <br>This default sender is also set by {@link #withAuthentication(String, String)} if not already set and user passed to the method is a valid email address.
+	 * <br>The sender can always be redefined with {@link Message#withSender(MailAddress)}
+	 * @param defaultSender the new default sender address.
+	 * @return this
+	 */
+	public MailerBuilder withDefaultSender(MailAddress defaultSender) {
+		this.defaultSender = defaultSender;
 		return this;
 	}
 
+	/** Sets the port.
+	 * <br>As {@link #withEncryption(Encryption)} sets the default port accordingly with the encryption,
+	 * this method is only useful for servers that use custom ports.
+	 * @param port
+	 * @return this
+	 * @throws IllegalArgumentException if port is &lt; 0
+	 */
 	public MailerBuilder withPort(int port) {
+		if (port<=0) {
+			throw new IllegalStateException("Port is <= 0");
+		}
 		this.port = port;
 		return this;
 	}
 
+	/** Builds the mailer.
+	 * @return a new Mailer
+	 */
 	public Mailer build() {
-		if (from==null) {
-			throw new IllegalStateException("From adress is null");
-		}
-		if (port<=0) {
-			throw new IllegalStateException("Port is <= 0");
-		}
-		if (user!=null && pwd==null) {
-			throw new IllegalStateException("Password is null");
-		}
-		
 		final Properties props = new Properties();
 		props.put("mail.smtp.host", host);
 		props.put("mail.smtp.port", port);
@@ -84,7 +116,7 @@ public class MailerBuilder {
 			auth = null;
 		}
 		final Session session = Session.getDefaultInstance(props, auth);
-		return new DefaultMailer(session, from);
+		return new DefaultMailer(session, defaultSender);
 	}
 
 	public String getHost() {
@@ -99,8 +131,8 @@ public class MailerBuilder {
 		return pwd;
 	}
 
-	public MailAddress getFrom() {
-		return from;
+	public MailAddress getDefaultSender() {
+		return defaultSender;
 	}
 
 	public Encryption getEncryption() {
