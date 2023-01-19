@@ -7,11 +7,15 @@ import java.util.Properties;
 import org.junit.jupiter.api.Test;
 
 import jakarta.mail.Authenticator;
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.InternetAddress;
 
 class MailerBuilderTest {
 
 	@Test
-	void test() {
+	void test() throws AddressException {
+		assertThrows(IllegalArgumentException.class, ()-> new MailerBuilder(null));
+		
 		final ObservableBuilder builder = new ObservableBuilder("toto");
 		assertEquals("toto",builder.getHost());
 		assertEquals(Encryption.TLS, builder.getEncryption());
@@ -48,6 +52,7 @@ class MailerBuilderTest {
 		assertNull(builder.getPwd());
 		assertNull(builder.getUser());
 		assertNotNull(builder.getDefaultSender());
+		assertEquals(new InternetAddress("me@gmail.com"), builder.getDefaultSender().getAddress());
 		builder.withDefaultSender(null);
 		assertNull(builder.getDefaultSender());
 		
@@ -64,6 +69,10 @@ class MailerBuilderTest {
 		builder.build();
 		assertEquals(2, builder.props.size());
 		assertEquals(Encryption.NONE.getDefaultPort(), builder.props.get("mail.smtp.port"));
+		
+		builder.withPort(9815);
+		builder.build();
+		assertEquals(9815, builder.props.get("mail.smtp.port"));
 	}
 	
 	private static class ObservableBuilder extends MailerBuilder {
