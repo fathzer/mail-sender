@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 class EmailAddressTest {
 
+	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	void test() {
 		assertThrows(IllegalArgumentException.class, () -> new EMailAddress(null));
@@ -22,7 +23,7 @@ class EmailAddressTest {
 		assertEquals(addr.hashCode(), new EMailAddress("a@b.com").hashCode());
 		
 		assertNotEquals(null, addr);
-		assertNotEquals("a@b.com", addr);
-		assertEquals (addr,addr);
+		assertFalse(addr.equals("a@b.com"));
+		assertTrue(addr.equals(addr));
 	}
 }

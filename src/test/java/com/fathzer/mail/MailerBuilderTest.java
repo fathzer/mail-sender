@@ -56,6 +56,12 @@ class MailerBuilderTest {
 		builder.withDefaultSender(null);
 		assertNull(builder.getDefaultSender());
 		
+	}
+	
+	@Test
+	void moreTests() {
+		final ObservableBuilder builder = new ObservableBuilder("toto");
+
 		builder.withEncryption(Encryption.SSL);
 		assertEquals(Encryption.SSL, builder.getEncryption());
 		assertEquals(Encryption.SSL.getDefaultPort(), builder.getPort());
@@ -64,11 +70,7 @@ class MailerBuilderTest {
 		assertEquals(Encryption.SSL.getDefaultPort(), builder.props.get("mail.smtp.port"));
 		assertEquals(true, builder.props.get("mail.smtp.ssl.checkserveridentity"));
 		assertEquals("javax.net.ssl.SSLSocketFactory", builder.props.get("mail.smtp.socketFactory.class"));
-	}
-	
-	@Test
-	void moreTests() {
-		final ObservableBuilder builder = new ObservableBuilder("toto");
+
 		builder.withEncryption(Encryption.NONE);
 		builder.build();
 		assertEquals(2, builder.props.size());
