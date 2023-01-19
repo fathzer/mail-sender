@@ -85,7 +85,7 @@
 				</executions>
 				<configuration>
 					<!-- For obvious security reasons, keyFile and pass phrase are not provided, 
-						they should be in file present in the user's home directory -->
+						they should be in files present in the user's home directory -->
 					<secretkey>keyfile:${user.home}/fathzer_private_key.asc</secretkey>
 					<passphrase>file:${user.home}/fathzer_key_pwd.txt</passphrase>
 				</configuration>
@@ -111,7 +111,9 @@
 					<!-- see https://stackoverflow.com/questions/69320220/maven-javadoc-listed-classes-twice -->
 					<sourcepath>${basedir}/src/main/java</sourcepath>
 					<header>${project.version}</header>
-					<footer>${project.version}</footer>
+					<bottom>
+      					Copyright © 2023 fathzer.com. Licensed under Apache 2.0.
+    				</bottom>
 					<doclint>all</doclint>
 				</configuration>
 				<executions>

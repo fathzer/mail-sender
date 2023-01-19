@@ -12,11 +12,11 @@ A minimalist java mail client API to send emails through external SMTP server.
 
 The library is distributed through Maven (see badge above).
 
-WORK IN PROGRESS...
+It requires java 8+.
 
 Here is an example using GMail
 
 ```
 Mailer mailer = new MailerBuilder("smtp.gmail.com").withAuthentication("me@gmail.com", "anapppassword").build();
-mailer.send(new Message(MailAddress.list("other@hisdomain.com"), "test", "This is a test from Google"));
+mailer.send(new EMail(MailAddress.list("other@hisdomain.com"), "test", "This is a test from Google"));
 ```

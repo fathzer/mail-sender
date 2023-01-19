@@ -2,7 +2,9 @@ package com.fathzer.mail;
 
 import java.util.List;
 
-public class Message {
+/** A Mail message.
+ */
+public class EMail {
 	private MailAddress sender;
 	private List<MailAddress> recipients;
 	private List<MailAddress> replyTo;
@@ -18,7 +20,7 @@ public class Message {
 	 * @see #withMimeType(MimeType)
 	 * @throws IllegalArgumentException if recipients is empty or null or one of others arguments is null 
 	 */
-	public Message(List<MailAddress> recipients, String subject, String content) {
+	public EMail(List<MailAddress> recipients, String subject, String content) {
 		super();
 		if (recipients==null || recipients.isEmpty() || subject == null || content==null) {
 			throw new IllegalArgumentException();
@@ -34,7 +36,7 @@ public class Message {
 	 * @param sender The sender of this message. Null to use the mailer's default sender
 	 * @return this
 	 */
-	public Message withSender(MailAddress sender) {
+	public EMail withSender(MailAddress sender) {
 		this.sender = sender;
 		return this;
 	}
@@ -43,7 +45,7 @@ public class Message {
 	 * @param replyTo a list of email addresses or null to not specifying reply '<i>reply to</i>'
 	 * @return this
 	 */
-	public Message withReplyTo(List<MailAddress> replyTo) {
+	public EMail withReplyTo(List<MailAddress> replyTo) {
 		this.replyTo = replyTo;
 		return this;
 	}
@@ -53,7 +55,7 @@ public class Message {
 	 * @return this
 	 * @throws IllegalArgumentException if mimeType is null
 	 */
-	public Message withMimeType(MimeType mimeType) {
+	public EMail withMimeType(MimeType mimeType) {
 		if (mimeType==null) {
 			throw new IllegalArgumentException();
 		}

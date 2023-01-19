@@ -6,8 +6,10 @@ import jakarta.mail.Authenticator;
 import jakarta.mail.PasswordAuthentication;
 import jakarta.mail.Session;
 
+/** A class able to build a Mailer.
+ */
 public class MailerBuilder {
-	private String host;
+	private final String host;
 	private String user;
 	private String pwd;
 	private MailAddress defaultSender;
@@ -71,7 +73,7 @@ public class MailerBuilder {
 
 	/** Sets a default sender for messages sent with this server.
 	 * <br>This default sender is also set by {@link #withAuthentication(String, String)} if not already set and user passed to the method is a valid email address.
-	 * <br>The sender can always be redefined with {@link Message#withSender(MailAddress)}
+	 * <br>The sender can always be redefined with {@link EMail#withSender(MailAddress)}
 	 * @param defaultSender the new default sender address.
 	 * @return this
 	 */
@@ -83,9 +85,9 @@ public class MailerBuilder {
 	/** Sets the port.
 	 * <br>As {@link #withEncryption(Encryption)} sets the default port accordingly with the encryption,
 	 * this method is only useful for servers that use custom ports.
-	 * @param port
+	 * @param port The new port
 	 * @return this
-	 * @throws IllegalArgumentException if port is &lt; 0
+	 * @throws IllegalArgumentException if port is &lt;= 0
 	 */
 	public MailerBuilder withPort(int port) {
 		if (port<=0) {
@@ -119,27 +121,45 @@ public class MailerBuilder {
 		return new DefaultMailer(session, defaultSender);
 	}
 
+	/** Gets the SMTP host.
+	 * @return a string.
+	 */
 	public String getHost() {
 		return host;
 	}
 
-	public String getUser() {
-		return user;
-	}
-
-	public String getPwd() {
-		return pwd;
-	}
-
-	public MailAddress getDefaultSender() {
-		return defaultSender;
-	}
-
+	/** Gets The encryption used to connect to the SMTP host.
+	 * @return an encryption.
+	 */
 	public Encryption getEncryption() {
 		return encryption;
 	}
 
+	/** Gets The SMTP host's port.
+	 * @return an int &gt; 0.
+	 */
 	public int getPort() {
 		return port;
+	}
+
+	/** Gets The user used for authentication.
+	 * @return a string. Null is no authentication is set.
+	 */
+	public String getUser() {
+		return user;
+	}
+
+	/** Gets The password used for authentication.
+	 * @return a string. Null is no authentication is set.
+	 */
+	public String getPwd() {
+		return pwd;
+	}
+
+	/** Gets The default message sender.
+	 * @return a mail address. Null is no default sender is set.
+	 */
+	public MailAddress getDefaultSender() {
+		return defaultSender;
 	}
 }

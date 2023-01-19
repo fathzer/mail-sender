@@ -25,12 +25,15 @@ public class DefaultMailer implements Mailer {
 		this.defaultSender = defaultSender.getAddress();
 	}
 	
+	/** Sets the debug mode of underlying jakarta mail api.
+	 * @param debug true to activate debug
+	 */
 	public void setDebug(boolean debug) {
 		session.setDebug(debug);
 	}
 	
 	@Override
-	public void send(Message message) throws IOException {
+	public void send(EMail message) throws IOException {
 		try {
 			final jakarta.mail.Message msg = new MimeMessage(session);
 			msg.setFrom(getSender(message));
@@ -48,7 +51,7 @@ public class DefaultMailer implements Mailer {
 		}
 	}
 	
-	private Address getSender(Message message) {
+	private Address getSender(EMail message) {
 		return message.getSender()==null ? defaultSender : message.getSender().getAddress();
 	}
 	
