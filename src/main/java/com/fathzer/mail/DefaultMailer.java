@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import jakarta.mail.Address;
+import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.Session;
 import jakarta.mail.Transport;
@@ -32,22 +33,25 @@ public class DefaultMailer implements Mailer {
 	}
 	
 	@Override
-	public void send(EMail message) throws IOException {
+	public void send(EMail email) throws IOException {
 		try {
-			final jakarta.mail.Message msg = new MimeMessage(session);
-			msg.setFrom(getSender(message));
-			if (message.getReplyTo()!=null) {
-				msg.setReplyTo(toAddresses(message.getReplyTo()));
+			final Message msg = new MimeMessage(session);
+			msg.setFrom(getSender(email));
+			if (email.getReplyTo()!=null) {
+				msg.setReplyTo(toAddresses(email.getReplyTo()));
 			}
-			msg.setRecipients(jakarta.mail.Message.RecipientType.TO, message.getRecipients().stream().map(EMailAddress::getAddress).toArray(Address[]::new));
-			msg.setSubject(message.getSubject());
-			msg.setContent(message.getContent(), message.getMimeType().toString());
+			msg.setRecipients(Message.RecipientType.TO, email.getRecipients().stream().map(EMailAddress::getAddress).toArray(Address[]::new));
+			msg.setSubject(email.getSubject());
+			msg.setContent(email.getContent(), email.getMimeType().toString());
 	
-			// Setting the Subject and Content Type
-			Transport.send(msg);
+			send(msg);
 		} catch (MessagingException e) {
 			throw new IOException(e);
 		}
+	}
+	
+	void send(Message msg) throws MessagingException {
+		Transport.send(msg);
 	}
 	
 	private Address getSender(EMail message) {
