@@ -12,6 +12,9 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.MimeMessage;
 
 /** A default implementation of mailer based on javax/jakarta.mail.
+ * <br>This class is accessible to this library users only for testing purpose.
+ * <br>There's no guarantee this class will remain in this library in future releases.
+ * Please consider using {@link MailerBuilder} to get a mailer.
  */
 public class JakartaMailer implements Mailer {
 	private final Session session;
