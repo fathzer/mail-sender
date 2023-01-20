@@ -5,6 +5,7 @@ import java.util.List;
 
 import jakarta.mail.Address;
 import jakarta.mail.Message;
+import jakarta.mail.Message.RecipientType;
 import jakarta.mail.MessagingException;
 import jakarta.mail.Session;
 import jakarta.mail.Transport;
@@ -40,7 +41,9 @@ public class DefaultMailer implements Mailer {
 			if (email.getReplyTo()!=null) {
 				msg.setReplyTo(toAddresses(email.getReplyTo()));
 			}
-			msg.setRecipients(Message.RecipientType.TO, email.getRecipients().stream().map(EMailAddress::getAddress).toArray(Address[]::new));
+			addRecipients(msg, Message.RecipientType.TO, email.getRecipients().getTo());
+			addRecipients(msg, Message.RecipientType.CC, email.getRecipients().getCc());
+			addRecipients(msg, Message.RecipientType.BCC, email.getRecipients().getBcc());
 			msg.setSubject(email.getSubject());
 			msg.setContent(email.getContent(), email.getMimeType().toString());
 	
@@ -48,6 +51,10 @@ public class DefaultMailer implements Mailer {
 		} catch (MessagingException e) {
 			throw new IOException(e);
 		}
+	}
+	
+	private void addRecipients(Message msg, RecipientType recipientType, List<EMailAddress> addresses) throws MessagingException {
+		msg.setRecipients(recipientType, addresses.stream().map(EMailAddress::getAddress).toArray(Address[]::new));
 	}
 	
 	void send(Message msg) throws MessagingException {

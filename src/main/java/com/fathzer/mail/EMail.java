@@ -6,7 +6,7 @@ import java.util.List;
  */
 public class EMail {
 	private EMailAddress sender;
-	private List<EMailAddress> recipients;
+	private Recipients recipients;
 	private List<EMailAddress> replyTo;
 	private String subject;
 	private String content;
@@ -20,7 +20,7 @@ public class EMail {
 	 * @see #withMimeType(MimeType)
 	 * @throws IllegalArgumentException if recipients is empty or null or one of others arguments is null 
 	 */
-	public EMail(List<EMailAddress> recipients, String subject, String content) {
+	public EMail(Recipients recipients, String subject, String content) {
 		super();
 		if (recipients==null || recipients.isEmpty() || subject == null || content==null) {
 			throw new IllegalArgumentException();
@@ -63,7 +63,7 @@ public class EMail {
 		return this;
 	}
 
-	List<EMailAddress> getRecipients() {
+	Recipients getRecipients() {
 		return recipients;
 	}
 

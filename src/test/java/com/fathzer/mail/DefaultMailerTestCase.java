@@ -3,7 +3,6 @@ package com.fathzer.mail;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Properties;
 
 import org.junit.jupiter.api.Test;
@@ -30,10 +29,10 @@ class DefaultMailerTestCase {
 		mailer.setDebug(true);
 		assertTrue(mailer.session.getDebug());
 		
-		List<EMailAddress> to = EMailAddress.list("me@yahoo.de");
+		Recipients to = Recipients.to("me@yahoo.de");
 		EMail mail = new EMail(to, "subject", "content");
 		mailer.send(mail);
-		assertArrayEquals(to.stream().map(EMailAddress::getAddress).toArray(Address[]::new), mailer.msg.getRecipients(Message.RecipientType.TO));
+		assertArrayEquals(to.getTo().stream().map(EMailAddress::getAddress).toArray(Address[]::new), mailer.msg.getRecipients(Message.RecipientType.TO));
 		assertEquals(1, mailer.msg.getFrom().length);
 		assertEquals(defaultSender.getAddress(), mailer.msg.getFrom()[0]);
 		assertEquals("subject", mailer.msg.getSubject());
