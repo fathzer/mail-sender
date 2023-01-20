@@ -36,6 +36,7 @@ class JakartaMailerTestCase {
 		
 		EMailAddress other = new EMailAddress("other@amazon.com");
 		mail.withMimeType(MimeType.HTML).withSender(other).withReplyTo(Collections.singletonList(defaultSender));
+		to.setTo(EMailAddress.list("to@gmail.com"));
 		to.setCc(EMailAddress.list("cc@gmail.com"));
 		to.setBcc(EMailAddress.list("bcc@gmail.com"));
 		mailer.send(mail);
@@ -44,10 +45,9 @@ class JakartaMailerTestCase {
 		assertEquals("text/html", Transport.lastMsg.getDataHandler().getContentType());
 		assertEquals(1, Transport.lastMsg.getReplyTo().length);
 		assertEquals(defaultSender.getAddress(), Transport.lastMsg.getReplyTo()[0]);
-		testRecipientsAre(RecipientType.TO, new String[]{"to@yahoo.de"});
+		testRecipientsAre(RecipientType.TO, new String[]{"to@gmail.com"});
 		testRecipientsAre(RecipientType.CC, new String[]{"cc@gmail.com"});
 		testRecipientsAre(RecipientType.BCC, new String[]{"bcc@gmail.com"});
-//		assertEquals(Transport.lastMsg.getRecipients(Recipients))
 	}
 	
 	void testRecipientsAre(RecipientType type, String[] mails) throws MessagingException {
