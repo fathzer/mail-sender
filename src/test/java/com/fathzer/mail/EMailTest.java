@@ -2,6 +2,7 @@ package com.fathzer.mail;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ class EMailTest {
 	void test() {
 		final List<EMailAddress> list = EMailAddress.list("a@b.com");
 		assertThrows(IllegalArgumentException.class, () -> new EMail(null,"test","content"));
+		assertThrows(IllegalArgumentException.class, () -> new EMail(Collections.emptyList(),"test","content"));
 		assertThrows(IllegalArgumentException.class, () -> new EMail(list,null,"content"));
 		assertThrows(IllegalArgumentException.class, () -> new EMail(list,"test",null));
 		
