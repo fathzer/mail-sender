@@ -5,10 +5,10 @@
 	<version>0.0.1</version>
 	<name>mail-sender</name>
 	<description>A minimalist java mail client API to send emails through external SMTP server.</description>
-	<url>https://github.com/fathzer/docker-mail-service</url>
+	<url>https://github.com/fathzer/mail-sender</url>
 	<scm>
-		<url>https://github.com/fathzer/docker-mail-service.git</url>
-		<connection>https://github.com/docker-mail-service.git</connection>
+		<url>https://github.com/fathzer/mail-sender.git</url>
+		<connection>https://github.com/mail-sender.git</connection>
 	</scm>
 	<licenses>
 		<license>
