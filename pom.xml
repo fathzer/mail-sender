@@ -5,10 +5,10 @@
 	<version>0.0.1</version>
 	<name>mail-sender</name>
 	<description>A minimalist java mail client API to send emails through external SMTP server.</description>
-	<url>https://github.com/fathzer/docker-mail-service</url>
+	<url>https://github.com/fathzer/mail-sender</url>
 	<scm>
-		<url>https://github.com/fathzer/docker-mail-service.git</url>
-		<connection>https://github.com/docker-mail-service.git</connection>
+		<url>https://github.com/fathzer/mail-sender.git</url>
+		<connection>https://github.com/mail-sender.git</connection>
 	</scm>
 	<licenses>
 		<license>
@@ -43,6 +43,12 @@
 			<artifactId>commons-validator</artifactId>
 			<version>1.5.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.7.2</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -51,6 +57,26 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<!-- JUnit 5 requires Surefire version 2.22.0 or higher -->
 				<version>2.22.2</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>animal-sniffer-maven-plugin</artifactId>
+				<version>1.22</version>
+				<configuration>
+					<signature>
+						<groupId>org.codehaus.mojo.signature</groupId>
+						<artifactId>java18</artifactId>
+						<version>1.0</version>
+					</signature>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.kohsuke</groupId>
@@ -65,7 +91,7 @@
 				</executions>
 				<configuration>
 					<!-- For obvious security reasons, keyFile and pass phrase are not provided, 
-						they should be in file present in the user's home directory -->
+						they should be in files present in the user's home directory -->
 					<secretkey>keyfile:${user.home}/fathzer_private_key.asc</secretkey>
 					<passphrase>file:${user.home}/fathzer_key_pwd.txt</passphrase>
 				</configuration>
@@ -91,7 +117,9 @@
 					<!-- see https://stackoverflow.com/questions/69320220/maven-javadoc-listed-classes-twice -->
 					<sourcepath>${basedir}/src/main/java</sourcepath>
 					<header>${project.version}</header>
-					<footer>${project.version}</footer>
+					<bottom>
+      					Copyright © 2023 fathzer.com. Licensed under Apache 2.0.
+    				</bottom>
 					<doclint>all</doclint>
 				</configuration>
 				<executions>
