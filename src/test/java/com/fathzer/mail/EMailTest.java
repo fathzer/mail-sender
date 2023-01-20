@@ -10,7 +10,8 @@ class EMailTest {
 	void test() {
 		final Recipients list = Recipients.to("a@b.com");
 		assertThrows(IllegalArgumentException.class, () -> new EMail(null,"test","content"));
-		assertThrows(IllegalArgumentException.class, () -> new EMail(Recipients.to(),"test","content"));
+		Recipients emptyRecipients = Recipients.to();
+		assertThrows(IllegalArgumentException.class, () -> new EMail(emptyRecipients,"test","content"));
 		assertThrows(IllegalArgumentException.class, () -> new EMail(list,null,"content"));
 		assertThrows(IllegalArgumentException.class, () -> new EMail(list,"test",null));
 		

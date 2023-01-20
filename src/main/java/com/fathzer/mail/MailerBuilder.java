@@ -113,7 +113,7 @@ public class MailerBuilder {
 	}
 	
 	Mailer build(Properties props, Authenticator auth) {
-		return new DefaultMailer(Session.getInstance(props, auth), defaultSender);
+		return new JakartaMailer(Session.getInstance(props, auth), defaultSender);
 	}
 	
 	private Authenticator getAuthenticator() {

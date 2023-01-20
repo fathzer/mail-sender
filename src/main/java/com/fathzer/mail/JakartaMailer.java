@@ -13,7 +13,7 @@ import jakarta.mail.internet.MimeMessage;
 
 /** A default implementation of mailer based on javax/jakarta.mail.
  */
-public class DefaultMailer implements Mailer {
+public class JakartaMailer implements Mailer {
 	private final Session session;
 	private Address defaultSender;
 
@@ -21,7 +21,7 @@ public class DefaultMailer implements Mailer {
 	 * @param session The jakarta Session object
 	 * @param defaultSender The default sender mail address or null if no default sender is defined
 	 */
-	public DefaultMailer(Session session, EMailAddress defaultSender) {
+	public JakartaMailer(Session session, EMailAddress defaultSender) {
 		this.session = session;
 		this.defaultSender = defaultSender==null ? null : defaultSender.getAddress();
 	}
@@ -47,7 +47,7 @@ public class DefaultMailer implements Mailer {
 			msg.setSubject(email.getSubject());
 			msg.setContent(email.getContent(), email.getMimeType().toString());
 	
-			send(msg);
+			Transport.send(msg);
 		} catch (MessagingException e) {
 			throw new IOException(e);
 		}
@@ -57,15 +57,15 @@ public class DefaultMailer implements Mailer {
 		msg.setRecipients(recipientType, addresses.stream().map(EMailAddress::getAddress).toArray(Address[]::new));
 	}
 	
-	void send(Message msg) throws MessagingException {
-		Transport.send(msg);
-	}
-	
 	private Address getSender(EMail message) {
 		return message.getSender()==null ? defaultSender : message.getSender().getAddress();
 	}
 	
 	private Address[] toAddresses(List<EMailAddress> addr) {
 		return addr.stream().map(EMailAddress::getAddress).toArray(Address[]::new);
+	}
+	
+	Session getSession() {
+		return session;
 	}
 }

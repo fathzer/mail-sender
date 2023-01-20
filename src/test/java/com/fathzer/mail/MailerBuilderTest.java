@@ -53,6 +53,11 @@ class MailerBuilderTest {
 		assertEquals("me@gmail.com",builder.getUser());
 		assertEquals(new EMailAddress("me@gmail.com"),builder.getDefaultSender());
 		assertEquals("gmailpwd", builder.getPwd());
+		builder.build();
+		assertNotNull(builder.auth);
+		assertEquals("me@gmail.com", builder.auth.getPwdAuth().getUserName());
+		assertEquals("gmailpwd", builder.auth.getPwdAuth().getPassword());
+
 		builder.withAuthentication(null, null);
 		assertNull(builder.getPwd());
 		assertNull(builder.getUser());
@@ -60,6 +65,8 @@ class MailerBuilderTest {
 		assertEquals(new InternetAddress("me@gmail.com"), builder.getDefaultSender().getAddress());
 		builder.withDefaultSender(null);
 		assertNull(builder.getDefaultSender());
+		builder.build();
+		assertNull(builder.auth);
 
 		builder.withEncryption(Encryption.SSL);
 		assertEquals(Encryption.SSL, builder.getEncryption());
