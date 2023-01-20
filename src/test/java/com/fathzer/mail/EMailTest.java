@@ -15,7 +15,7 @@ class EMailTest {
 		assertThrows(IllegalArgumentException.class, () -> new EMail(list,"test",null));
 		
 		final EMail mail = new EMail(list,"test","content");
-		assertEquals(EMailAddress.list("a@b.com"),mail.getRecipients());
+		assertEquals(EMailAddress.list("a@b.com"),mail.getRecipients().getTo());
 		assertEquals("test",mail.getSubject());
 		assertEquals("content",mail.getContent());
 		assertEquals(MimeType.TEXT, mail.getMimeType());
