@@ -1,7 +1,6 @@
 # mail-sender
 A minimalist java mail client API to send emails through external SMTP server.
 
-![Maven Central](https://img.shields.io/maven-central/v/com.fathzer/mail-sender)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.fathzer/mail-sender/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.fathzer/mail-sender)
 ![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fathzer_mail-sender&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fathzer_mail-sender)
